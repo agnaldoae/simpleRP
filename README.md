@@ -12,10 +12,10 @@ python3 recurrence-plot -b t-series1.txt
 The `-b` argument is used to indicate a Recurrence Plot will be created.<br>
 To create a Distance Plot, just do:
 ```Bash
-python3 recurrence-plot t-series2.csv
+python3 recurrence-plot t-series1.txt
 ```
 * When your input data have more than one column, you must inform which column need to be load, e.g.:
 ```Bash
-python3 recurrence-plot -b --column 4 t-series1.txt
+python3 recurrence-plot -b --column 4 t-series2.csv
 ```
 For more information, run the script without arguments or use `-h`.
