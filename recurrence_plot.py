@@ -17,9 +17,10 @@ def scaling(series):
     return new
 
 # Binarization
-def binarization(matrix, threshold):
-    matrix[matrix >= threshold] = 1.0
+def binarization(matrix, threshold)
     matrix[matrix < threshold] = 0.0
+    matrix[matrix >= threshold] = 1.0
+    
     return matrix
 
 # Recurrence (Distance) Plot 
