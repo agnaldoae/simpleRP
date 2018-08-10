@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import pylab as plt
 import argparse
+import cv2 as cv
 
 # Scaling data to the [0,1] range
 # y = (x - min) / (max / min)
@@ -16,7 +17,7 @@ def scaling(series):
         new[i] = (series[i] - minimum)/(maximum - minimum)
     return new
     
-def scaleMat2Image(matrix):
+def Mat2Image(matrix, fileName):
     minimun = np.amin(np.min(matrix))
     maximun = np.amax(np.amax(matrix))
     diff = maximun-minimun
@@ -24,6 +25,8 @@ def scaleMat2Image(matrix):
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             matrix[i,j] = 255*((matrix[i,j]-minimun)/(diff))
+    cv.imwrite(fileName, matrix)
+
 
 # Binarization
 def binarization(matrix, threshold):
@@ -41,6 +44,12 @@ def rplot(series, err=0.03, bin=0):
     if (bin == 1):
         rp = binarization(rp, err)
     return rp
+    
+def loadingData(fileName, column):
+    dataframe = pd.read_csv(fileName, usecols=[column], engine='python') #first line is read as header
+    dataset = dataframe.values
+    return dataset.astype('float32')
+
 
 #### Main 
 if __name__ == "__main__":
@@ -57,11 +66,12 @@ if __name__ == "__main__":
     parser.add_argument('--output', default='recurrencePlot.png', help='Output picture name (you must include extension, e.g., .png, .pdf)')
     args = parser.parse_args()
 
-    dataframe = pd.read_csv(args.timeSeries, usecols=[args.column], engine='python')
-    plt.plot(dataframe)
-    plt.figure()
-    dataset = dataframe.values
-    dataset = dataset.astype('float32')
+    #dataframe = pd.read_csv(args.timeSeries, usecols=[args.column], engine='python')
+    #plt.plot(dataframe)
+    #plt.figure()
+    #dataset = dataframe.values
+    #dataset = dataset.astype('float32')
+    dataset = loadingData(args.timeSeries,args.column)
     new_dataset = scaling(dataset)
     rp = []
     if args.b:
@@ -73,8 +83,8 @@ if __name__ == "__main__":
     #plt.xticks([])
     #plt.yticks([])
     #plt.savefig(args.output, bbox_inches='tight')
-    scaleMat2Image(rp)
-    cv.imwrite("RP.png", rp)
+    Mat2Image(rp,"RP.jpg" )
+    
     
     
 
